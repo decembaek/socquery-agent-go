@@ -63,8 +63,10 @@ jobs:
           for d in dist/*/; do
             [ -d "$d" ] || continue
             f=$(basename "$d")
-            [ -f "$d$f" ] && mv "$d$f" "dist/$f"
-            rmdir "$d" 2>/dev/null || true
+            [ -f "$d$f" ] || continue
+            mv "$d$f" "dist/${f}.tmp"
+            rmdir "$d"
+            mv "dist/${f}.tmp" "dist/$f"
           done
 
       - name: Create Release
