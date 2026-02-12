@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/decembaek/socquery-client-agent/internal/scanner"
+	"github.com/decembaek/socquery-agent-go/internal/scanner"
 )
 
 // NetworkConfig is the network detector configuration.

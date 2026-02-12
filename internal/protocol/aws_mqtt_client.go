@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/decembaek/socquery-client-agent/internal/config"
+	"github.com/decembaek/socquery-agent-go/internal/config"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 

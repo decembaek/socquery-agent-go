@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/decembaek/socquery-client-agent/internal/scanner"
+	"github.com/decembaek/socquery-agent-go/internal/scanner"
 )
 
 // WatchProcess 는 감시할 프로세스 정의입니다.

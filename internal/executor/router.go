@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/decembaek/socquery-client-agent/internal/scanner"
+	"github.com/decembaek/socquery-agent-go/internal/scanner"
 )
 
 // Router 는 MQTT로 수신된 명령을 적절한 핸들러로 라우팅하는 실행기입니다.

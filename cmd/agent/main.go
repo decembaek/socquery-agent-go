@@ -11,11 +11,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/decembaek/socquery-client-agent/internal/anomaly"
-	"github.com/decembaek/socquery-client-agent/internal/config"
-	"github.com/decembaek/socquery-client-agent/internal/executor"
-	"github.com/decembaek/socquery-client-agent/internal/protocol"
-	"github.com/decembaek/socquery-client-agent/internal/scanner"
+	"github.com/decembaek/socquery-agent-go/internal/anomaly"
+	"github.com/decembaek/socquery-agent-go/internal/config"
+	"github.com/decembaek/socquery-agent-go/internal/executor"
+	"github.com/decembaek/socquery-agent-go/internal/protocol"
+	"github.com/decembaek/socquery-agent-go/internal/scanner"
 )
 
 const (

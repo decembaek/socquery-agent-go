@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/decembaek/socquery-client-agent/internal/scanner"
+	"github.com/decembaek/socquery-agent-go/internal/scanner"
 )
 
 // USBConfig 는 USB 감지기 설정입니다.

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/decembaek/socquery-client-agent/internal/scanner"
+	"github.com/decembaek/socquery-agent-go/internal/scanner"
 )
 
 // ResourceThresholds 는 리소스 임계치 설정입니다.

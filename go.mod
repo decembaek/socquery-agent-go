@@ -1,4 +1,4 @@
-module github.com/decembaek/socquery-client-agent
+module github.com/decembaek/socquery-agent-go
 
 go 1.25.6
 

@@ -6,7 +6,7 @@ import (
 	"log"
 	"sync"
 
-	"github.com/decembaek/socquery-client-agent/internal/scanner"
+	"github.com/decembaek/socquery-agent-go/internal/scanner"
 )
 
 // EngineConfig 는 이상치 분석 엔진 설정입니다.

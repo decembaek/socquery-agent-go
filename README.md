@@ -5,6 +5,39 @@ SaaS 웹 콘솔에서 장비를 등록하고, AWS IoT Core와 MQTT로 통신하�
 
 ---
 
+## Install (pre-built)
+
+[Releases](https://github.com/decembaek/socquery-agent-go/releases) provide binaries for:
+
+| OS / Arch      | Asset             |
+|----------------|-------------------|
+| Linux (x64)    | `soc-linux`       |
+| macOS (Intel)  | `soc-darwin-amd64`|
+| macOS (Apple Silicon) | `soc-darwin-arm64` |
+| Windows (x64)  | `soc.exe`         |
+
+**Linux / macOS**
+
+```bash
+# Set BASE to latest release (or a specific version, e.g. .../download/v1.0.0)
+BASE="https://github.com/decembaek/socquery-agent-go/releases/latest/download"
+curl -sSL -o soc-linux "$BASE/soc-linux" && chmod +x soc-linux
+./soc-linux --token "YOUR_REGISTRATION_TOKEN"
+```
+
+**macOS (Apple Silicon)** use `soc-darwin-arm64`; **macOS (Intel)** use `soc-darwin-amd64` in the URL and filename.
+
+**Windows (PowerShell)**
+
+```powershell
+Invoke-WebRequest -Uri "https://github.com/decembaek/socquery-agent-go/releases/latest/download/soc.exe" -OutFile "soc.exe"
+.\soc.exe --token "YOUR_REGISTRATION_TOKEN"
+```
+
+Get a registration token from the SaaS dashboard (Agents → Register Agent).
+
+---
+
 ## 프로젝트 구조
 
 ```
