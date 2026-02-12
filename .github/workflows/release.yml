@@ -79,11 +79,6 @@ jobs:
     needs: release
     runs-on: ubuntu-latest
     steps:
-      - name: Install AWS CLI
-        run: |
-          curl -sSf "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
-          unzip -q awscliv2.zip && sudo ./aws/install
-          aws --version
       - uses: actions/download-artifact@v4
         with:
           path: dist
