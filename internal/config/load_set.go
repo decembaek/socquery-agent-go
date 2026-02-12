@@ -51,6 +51,25 @@ func getStoragePath() string {
 	return path
 }
 
+// ClearStoredConfig 는 저장된 인증 정보(auth.enc)를 삭제합니다.
+// 다음 실행 시 새 등록 토큰으로 다시 등록할 수 있습니다.
+func ClearStoredConfig() error {
+	path := getStoragePath()
+	if err := os.Remove(path); err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
+		return fmt.Errorf("설정 파일 삭제 실패: %w", err)
+	}
+	return nil
+}
+
+// GetStoragePath 는 저장 경로를 반환합니다 (초기화 시 경로 안내용).
+func GetStoragePath() string {
+	configDir, _ := os.UserConfigDir()
+	return filepath.Join(configDir, "socquery-agent", "auth.enc")
+}
+
 // saveConfig 는 AgentConfig를 machineID로 암호화하여 디스크에 저장합니다.
 func saveConfig(cfg *AgentConfig, machineID string) error {
 	// JSON 직렬화

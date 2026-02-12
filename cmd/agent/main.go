@@ -32,6 +32,7 @@ var anomalyEngine *anomaly.Engine
 func main() {
 	// CLI 플래그 파싱
 	token := flag.String("token", "", "장비 등록 토큰 (최초 등록 시 필수)")
+	reset := flag.Bool("reset", false, "저장된 인증 정보 초기화 (다음 실행 시 새 토큰으로 등록)")
 	scanUSB := flag.Bool("scan-usb", false, "USB 디바이스 1회 스캔 후 종료 (테스트용)")
 	scanHealth := flag.Bool("scan-health", false, "OS 헬스 1회 스캔 후 종료 (테스트용)")
 	scanProcess := flag.Bool("scan-process", false, "프로세스 1회 스캔 후 종료 (테스트용)")
@@ -40,6 +41,17 @@ func main() {
 	detectTest := flag.Bool("detect-test", false, "이상치 감지 테스트 (1회 전체 스캔 + 분석)")
 	httpTest := flag.String("http-test", "", "HTTP 프록시 테스트 (URL 지정, GET 요청 실행)")
 	flag.Parse()
+
+	// 초기화: 저장된 인증 정보 삭제
+	if *reset {
+		if err := config.ClearStoredConfig(); err != nil {
+			log.Fatalf("[에러] %v\n", err)
+		}
+		fmt.Println("[정보] 저장된 인증 정보를 삭제했습니다.")
+		fmt.Printf("[정보] 경로: %s\n", config.GetStoragePath())
+		fmt.Println("[정보] 다음 실행 시 --token 으로 새 등록을 진행할 수 있습니다.")
+		return
+	}
 
 	// 테스트 모드: 1회 스캔 후 종료
 	switch {
