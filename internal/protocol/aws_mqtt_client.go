@@ -81,10 +81,8 @@ func NewMQTTClient(cfg *config.AgentConfig, onMessage MessageHandler) (*MQTTClie
 		fmt.Printf("[MQTT] 연결 끊김: %v (자동 재연결 시도 중...)\n", err)
 	})
 
-	// 재연결 핸들러
-	opts.SetReconnectingHandler(func(c mqtt.Client, opts *mqtt.ClientOptions) {
-		fmt.Println("[MQTT] 재연결 시도 중...")
-	})
+	// 재연결 핸들러 (로그 생략)
+	opts.SetReconnectingHandler(func(c mqtt.Client, opts *mqtt.ClientOptions) {})
 
 	// 기본 메시지 핸들러
 	if onMessage != nil {
@@ -103,7 +101,6 @@ func NewMQTTClient(cfg *config.AgentConfig, onMessage MessageHandler) (*MQTTClie
 
 // Connect 는 AWS IoT Core에 연결합니다.
 func (m *MQTTClient) Connect() error {
-	fmt.Println("[MQTT] AWS IoT Core 연결 중...")
 	token := m.Client.Connect()
 	token.Wait()
 	if err := token.Error(); err != nil {
@@ -126,7 +123,6 @@ func (m *MQTTClient) Subscribe(topic string, handler MessageHandler) error {
 	if err := token.Error(); err != nil {
 		return fmt.Errorf("토픽 구독 실패 (%s): %w", topic, err)
 	}
-	fmt.Printf("[MQTT] 토픽 구독 완료: %s\n", topic)
 	return nil
 }
 
@@ -143,7 +139,6 @@ func (m *MQTTClient) Publish(topic string, payload interface{}) error {
 // Disconnect 는 MQTT 연결을 종료합니다.
 func (m *MQTTClient) Disconnect() {
 	m.Client.Disconnect(250)
-	fmt.Println("[MQTT] 연결 종료")
 }
 
 // IsConnected 는 현재 연결 상태를 반환합니다.

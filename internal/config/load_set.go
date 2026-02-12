@@ -77,7 +77,6 @@ func saveConfig(cfg *AgentConfig, machineID string) error {
 		return fmt.Errorf("파일 저장 실패: %w", err)
 	}
 
-	fmt.Println("[설정] 인증 정보 암호화 저장 완료:", path)
 	return nil
 }
 

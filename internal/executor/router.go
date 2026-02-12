@@ -42,8 +42,6 @@ func (r *Router) HandleCommand(payload []byte) {
 		return
 	}
 
-	log.Printf("[Executor] 명령 수신: action=%s, commandId=%s\n", cmd.Action, cmd.CommandID)
-
 	// 2. 비동기 실행 (타임아웃 적용)
 	go r.execute(cmd)
 }
@@ -98,9 +96,6 @@ func (r *Router) execute(cmd Command) {
 	if r.ResponseHandler != nil {
 		r.ResponseHandler(resp)
 	}
-
-	log.Printf("[Executor] 명령 완료: action=%s, commandId=%s, exitCode=%d, duration=%dms\n",
-		cmd.Action, cmd.CommandID, resp.ExitCode, resp.DurationMs)
 }
 
 // ---------------------------------------------------------------------------
@@ -115,8 +110,6 @@ func (r *Router) handleHTTPRequest(ctx context.Context, cmd Command, resp *Respo
 		resp.Error = fmt.Sprintf("HTTP 요청 파싱 실패: %v", err)
 		return
 	}
-
-	log.Printf("[Executor] HTTP %s %s\n", httpReq.Method, httpReq.URL)
 
 	// HTTP 요청 실행
 	httpResp, err := ExecuteHTTPRequest(ctx, httpReq)

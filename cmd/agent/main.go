@@ -87,7 +87,6 @@ func main() {
 
 	// 3. MQTT 클라이언트 생성 (명령 수신 → Router로 전달)
 	mqttClient, err := protocol.NewMQTTClient(cfg, func(topic string, payload []byte) {
-		fmt.Printf("[수신] 토픽: %s | 메시지: %s\n", topic, string(payload))
 		cmdRouter.HandleCommand(payload)
 	})
 	if err != nil {
@@ -112,10 +111,7 @@ func main() {
 			log.Printf("[Executor] 응답 발행 실패: %v\n", err)
 			return
 		}
-		log.Printf("[Executor] 응답 발행 완료: commandId=%s, topic=%s\n", resp.CommandID, responseTopic)
 	})
-
-	fmt.Println("[정보] 명령 실행기 초기화 완료 (HTTP 프록시 포함)")
 
 	// 6. 명령 수신 토픽 구독
 	commandTopic := topicBase + "/agent/command"
@@ -136,8 +132,6 @@ func main() {
 		}
 	})
 
-	fmt.Println("[정보] 이상치 분석 엔진 초기화 완료 (4축 감지)")
-
 	// 8. 연결 완료 메시지 발행
 	statusTopic := topicBase + "/agent/status"
 	statusMsg, _ := json.Marshal(map[string]interface{}{
@@ -156,8 +150,6 @@ func main() {
 	stopHealth := startPeriodicPublisher("Health", healthScanInterval, mqttClient, topicBase+"/system/health", publishHealthScan)
 	stopProcess := startPeriodicPublisher("Process", processScanInterval, mqttClient, topicBase+"/scan/process", publishProcessScan)
 	stopNetwork := startPeriodicPublisher("Network", networkScanInterval, mqttClient, topicBase+"/scan/network", publishNetworkScan)
-
-	fmt.Println("=== 에이전트 실행 중 (Ctrl+C로 종료) ===")
 
 	// 10. 시그널 대기 (graceful shutdown)
 	sigCh := make(chan os.Signal, 1)
@@ -233,7 +225,6 @@ func publishUSBScan(mqttClient *protocol.MQTTClient, topic string) {
 			return
 		}
 	}
-	fmt.Printf("[USB] 스캔 완료: %d개 디바이스\n", len(devices))
 }
 
 func publishHealthScan(mqttClient *protocol.MQTTClient, topic string) {
@@ -262,8 +253,6 @@ func publishHealthScan(mqttClient *protocol.MQTTClient, topic string) {
 			return
 		}
 	}
-	fmt.Printf("[Health] CPU: %.1f%% | Mem: %.1f%% | Disk: %.1f%%\n",
-		info.CPU.UsagePercent, info.Memory.UsagePercent, info.Disk.UsagePercent)
 }
 
 func publishProcessScan(mqttClient *protocol.MQTTClient, topic string) {
@@ -291,7 +280,6 @@ func publishProcessScan(mqttClient *protocol.MQTTClient, topic string) {
 			return
 		}
 	}
-	fmt.Printf("[Process] 스캔 완료: %d개 프로세스\n", result.TotalCount)
 }
 
 func publishNetworkScan(mqttClient *protocol.MQTTClient, topic string) {
@@ -319,8 +307,6 @@ func publishNetworkScan(mqttClient *protocol.MQTTClient, topic string) {
 			return
 		}
 	}
-	fmt.Printf("[Network] 인터페이스: %d개 | 연결: %d개 | DNS: %v\n",
-		len(result.Interfaces), result.Connections.Total, result.DNS.Reachable)
 }
 
 // ---------------------------------------------------------------------------
