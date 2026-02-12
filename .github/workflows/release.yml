@@ -78,7 +78,6 @@ jobs:
   upload-r2:
     needs: release
     runs-on: ubuntu-latest
-    if: ${{ secrets.R2_ACCESS_KEY_ID != '' }}
     steps:
       - name: Install AWS CLI
         run: |
