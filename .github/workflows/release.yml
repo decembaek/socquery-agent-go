@@ -74,3 +74,56 @@ jobs:
         with:
           files: dist/*
           generate_release_notes: true
+
+  upload-r2:
+    needs: release
+    runs-on: ubuntu-latest
+    if: ${{ secrets.R2_ACCESS_KEY_ID != '' }}
+    steps:
+      - name: Install AWS CLI
+        run: |
+          curl -sSf "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
+          unzip -q awscliv2.zip && sudo ./aws/install
+          aws --version
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+      - name: Flatten artifacts
+        run: |
+          for d in dist/*/; do
+            [ -d "$d" ] || continue
+            f=$(basename "$d")
+            [ -f "$d$f" ] || continue
+            mv "$d$f" "dist/${f}.tmp"
+            rmdir "$d"
+            mv "dist/${f}.tmp" "dist/$f"
+          done
+      - name: Configure AWS CLI for R2
+        run: |
+          mkdir -p ~/.aws
+          echo '[default]' > ~/.aws/config
+          echo 'region = auto' >> ~/.aws/config
+          echo '[default]' > ~/.aws/credentials
+          echo "aws_access_key_id = ${{ secrets.R2_ACCESS_KEY_ID }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key = ${{ secrets.R2_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+      - name: Upload to R2 (releases/latest)
+        env:
+          R2_ENDPOINT: 'https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com'
+        run: |
+          for f in dist/*; do
+            [ -f "$f" ] || continue
+            name=$(basename "$f")
+            aws s3 cp "$f" "s3://${{ secrets.R2_BUCKET }}/releases/latest/$name" \
+              --endpoint-url "$R2_ENDPOINT"
+          done
+      - name: Upload to R2 (versioned)
+        env:
+          R2_ENDPOINT: 'https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com'
+        run: |
+          ver="${{ github.ref_name }}"
+          for f in dist/*; do
+            [ -f "$f" ] || continue
+            name=$(basename "$f")
+            aws s3 cp "$f" "s3://${{ secrets.R2_BUCKET }}/releases/$ver/$name" \
+              --endpoint-url "$R2_ENDPOINT"
+          done
