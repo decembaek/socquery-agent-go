@@ -14,15 +14,23 @@ jobs:
         include:
           - os: windows
             arch: amd64
+            goarm: ''
             output: soc.exe
           - os: linux
             arch: amd64
+            goarm: ''
             output: soc-linux
+          - os: linux
+            arch: arm64
+            goarm: ''
+            output: soc-linux-arm64
           - os: darwin
             arch: amd64
+            goarm: ''
             output: soc-darwin-amd64
           - os: darwin
             arch: arm64
+            goarm: ''
             output: soc-darwin-arm64
 
     steps:
@@ -36,6 +44,7 @@ jobs:
         env:
           GOOS: ${{ matrix.os }}
           GOARCH: ${{ matrix.arch }}
+          GOARM: ${{ matrix.goarm }}
           CGO_ENABLED: 0
         run: |
           mkdir -p build
